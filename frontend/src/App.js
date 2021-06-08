@@ -9,6 +9,8 @@ import RestoreIcon from '@material-ui/icons/Restore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
+require('dotenv').config()
+
 const useStyles = makeStyles({
   root: {
     width: 500,
@@ -37,7 +39,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Learn React {process.env.REACT_APP_API_KEY}
         </a>
       </header>
 
