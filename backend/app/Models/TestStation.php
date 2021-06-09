@@ -22,6 +22,11 @@ class TestStation extends Model
         'phone',
         'email',
         'bsnr',
+        'email_leader',
+        'email_health_department',
+        'use_certificate_email',
+        'use_certificate_online',
+        'use_certificate_cwa',
     ];
 
     protected $dates = [

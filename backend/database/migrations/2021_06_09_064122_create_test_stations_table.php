@@ -24,6 +24,11 @@ class CreateTestStationsTable extends Migration
             $table->string('phone');
             $table->string('email');
             $table->integer('bsnr');
+            $table->string('email_leader');
+            $table->string('email_health_department');
+            $table->boolean('use_certificate_email');
+            $table->boolean('use_certificate_online');
+            $table->boolean('use_certificate_cwa');
             $table->timestamps();
             $table->softDeletes();
         });
