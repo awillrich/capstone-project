@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\Api\TestController as ApiTestController;
 use App\Http\Controllers\TestManufacturerController;
 use App\Http\Controllers\TestStationController;
 use Illuminate\Http\Request;
@@ -21,10 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-#Route::middleware('auth:api')->apiResources([
-Route::apiResources([
-    'tests', TestController::class,
-    'test_stations', TestStationController::class,
-    'test_manufacturer', TestManufacturerController::class,
-    ]);
+Route::resource('tests', ApiTestController::class);
+
 

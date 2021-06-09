@@ -14,7 +14,7 @@ class CreateTestManufacturersTable extends Migration
     public function up()
     {
         Schema::create('test_manufacturers', function (Blueprint $table) {
-            $table->uudi('id')->primary();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('pzn');
             $table->timestamps();

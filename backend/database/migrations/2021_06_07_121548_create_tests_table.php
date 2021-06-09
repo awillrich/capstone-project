@@ -14,26 +14,26 @@ class CreateTestsTable extends Migration
     public function up()
     {
         Schema::create('tests', function (Blueprint $table) {
-            $table->uudi('id')->primary();
+            $table->uuid('id')->primary();
             $table->integer('number');
             $table->uuid('test_station');
             $table->enum('state', ['registration', 'preregistration', 'appointment']);
             $table->dateTime('appointment')->nullable();
-            $table->string('type')->nullable();
+            $table->string('type')->default('quick');
             $table->string('name');
-            $table->string('firstname')->nullable();
-            $table->string('street')->nullable();
-            $table->string('zip')->nullable();
-            $table->string('city')->nullable();
-            $table->string('phone')->nullable();
+            $table->string('firstname');
+            $table->string('street');
+            $table->string('zip');
+            $table->string('city');
+            $table->string('phone');
             $table->string('email')->nullable();
-            $table->date('dob')->nullable();
+            $table->date('dob');
             $table->date('date');
-            $table->boolean('certificate_offline');
-            $table->boolean('certificate_email');
-            $table->boolean('certificate_online');
-            $table->boolean('certificate_cwa_personal');
-            $table->boolean('certificate_cwa_anonym');
+            $table->boolean('certificate_offline')->default(false);
+            $table->boolean('certificate_email')->default(false);
+            $table->boolean('certificate_online')->default(false);
+            $table->boolean('certificate_cwa_personal')->default(false);
+            $table->boolean('certificate_cwa_anonym')->default(false);
             $table->uuid('test_manufacturer_id')->nullable();
             $table->string('test_charge')->nullable();
             $table->string('test_result')->nullable();

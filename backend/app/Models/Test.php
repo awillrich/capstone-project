@@ -18,12 +18,13 @@ class Test extends Model
      */
     protected $fillable = [
         'id',
-        'name',
+        'number',
         'test_station',
         'appointment',
         'type',
         'name',
         'firstname',
+        'street',
         'zip',
         'city',
         'phone',

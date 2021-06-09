@@ -14,7 +14,7 @@ class CreateTestStationsTable extends Migration
     public function up()
     {
         Schema::create('test_stations', function (Blueprint $table) {
-            $table->uudi('id')->primary();
+            $table->uuid('id')->primary();
             $table->integer('number');
             $table->string('sign');
             $table->string('name');
