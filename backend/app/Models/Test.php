@@ -19,7 +19,7 @@ class Test extends Model
     protected $fillable = [
         'id',
         'name',
-        'teststation',
+        'test_station',
         'appointment',
         'type',
         'name',
@@ -63,4 +63,12 @@ class Test extends Model
         'date',
         'dob',
     ];
+
+    public function test_station() {
+        return $this->hasOne(TestStation::class);
+    }
+
+    public function test_manufacturer() {
+        return $this->hasOne(TestManufacturer::class);
+    }
 }

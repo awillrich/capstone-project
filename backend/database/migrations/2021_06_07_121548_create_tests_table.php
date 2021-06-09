@@ -16,7 +16,7 @@ class CreateTestsTable extends Migration
         Schema::create('tests', function (Blueprint $table) {
             $table->uudi('id')->primary();
             $table->integer('number');
-            $table->uuid('teststation');
+            $table->uuid('test_station');
             $table->enum('state', ['registration', 'preregistration', 'appointment']);
             $table->dateTime('appointment')->nullable();
             $table->string('type')->nullable();

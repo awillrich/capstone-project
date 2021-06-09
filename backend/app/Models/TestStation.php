@@ -34,4 +34,12 @@ class TestStation extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function users() {
+        return $this->hasMany(User::class);
+    }
+
+    public function tests() {
+        return $this->hasMany(Test::class);
+    }
 }

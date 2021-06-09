@@ -20,4 +20,8 @@ class TestManufacturer extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function tests() {
+        return $this->hasMany(Test::class);
+    }
 }

@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, MustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
@@ -40,5 +40,9 @@ class User extends Authenticatable
         'deleted_at',
         'email_verified_at',
     ];
+
+    public function test_station() {
+        return $this->hasOne(TestStation::class);
+    }
 
 }
