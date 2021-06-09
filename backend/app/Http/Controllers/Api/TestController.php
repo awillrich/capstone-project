@@ -212,7 +212,6 @@ class TestController extends Controller
     }
 
     function createCurrentNumber($test_station) {
-        return 1;
-        return Test::max('number')->where('test_station', $test_station) + 1;
+        return Test::where('test_station', $test_station)->max('number') + 1;
     }
 }
