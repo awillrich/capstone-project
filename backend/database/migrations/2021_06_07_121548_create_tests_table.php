@@ -41,6 +41,7 @@ class CreateTestsTable extends Migration
             $table->time('time_reception')->nullable();
             $table->time('time_test')->nullable();
             $table->time('time_evaluation')->nullable();
+            $table->time('time_email_notification')->nullable();
             $table->time('time_positive_leader')->nullable();
             $table->time('time_health_department')->nullable();
             $table->time('time_health_department_confirmation')->nullable();
