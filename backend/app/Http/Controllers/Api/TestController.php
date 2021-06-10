@@ -54,7 +54,7 @@ class TestController extends Controller
             'test_manufacturer_id' => 'uuid',
             'test_charge' => 'string|min:1|max:20',
             'test_result' => 'string|min:1|max:10',
-            'time_register' => 'string|min:1|max:10',
+            'time_register' => 'time',
             'time_reception' => 'time',
             'time_test' => 'time',
             'time_evaluation' => 'time',
