@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\TestController as ApiTestController;
-use App\Http\Controllers\TestManufacturerController;
-use App\Http\Controllers\TestStationController;
+use App\Http\Controllers\Api\TestManufacturerController as ApiTestManufacturerController;
+use App\Http\Controllers\Api\TestStationController as ApiTestStationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('tests', ApiTestController::class);
+Route::resource('test_stations', ApiTestStationController::class);
+Route::resource('test_manufacturers', ApiTestManufacturerController::class);
 
 

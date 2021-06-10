@@ -23,7 +23,7 @@ class CreateTestStationsTable extends Migration
             $table->string('city');
             $table->string('phone');
             $table->string('email');
-            $table->integer('bsnr');
+            $table->integer('bsnr')->nullable();
             $table->string('email_leader');
             $table->string('email_health_department');
             $table->boolean('use_certificate_email');
