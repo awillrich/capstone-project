@@ -21,8 +21,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('tests', ApiTestController::class);
-Route::resource('test_stations', ApiTestStationController::class);
-Route::resource('test_manufacturers', ApiTestManufacturerController::class);
-
+Route::group([
+        'middleware' => ['auth:api', 'cors'],
+    ], function ($router) {
+        Route::resource('tests', ApiTestController::class);
+        Route::resource('test_stations', ApiTestStationController::class);
+        Route::resource('test_manufacturers', ApiTestManufacturerController::class);
+});
 
