@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\TestController as ApiTestController;
 use App\Http\Controllers\Api\TestManufacturerController as ApiTestManufacturerController;
 use App\Http\Controllers\Api\TestStationController as ApiTestStationController;
+use App\Http\Controllers\Api\UserController as ApiUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,9 @@ Route::group([
         Route::resource('test_manufacturers', ApiTestManufacturerController::class);
 });
 
+Route::group(['prefix' => 'users', 'middleware' => 'cors'], function ($router) {
+Route::post('/register', [ApiUserController::class, 'register'])->name('register.user');
+Route::post('/login', [ApiUserController::class, 'login'])->name('login.user');
+Route::get('/view-profile', [ApiUserController::class, 'viewProfile'])->name('profile.user');
+Route::get('/logout', [ApiUserController::class, 'logout'])->name('logout.user');
+});
