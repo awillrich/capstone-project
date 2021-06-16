@@ -10,7 +10,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom";
 import Login from './pages/Login';
 
@@ -20,15 +21,19 @@ function App() {
   const [navValue, setNavValue] = useState('recents');
   const [tests, setTests] = useState([]);
 
-  console.log(localStorage.getItem('access_token'));
-  if(localStorage.getItem('access_token') === null || localStorage.getItem('access_token') === 'undefined') {
+  function login(form) {
+    let email = form[0];
+    let password = form[1];
     let myHeadersAuth = new Headers();
     myHeadersAuth.append("Content-Type", "application/json");
+    //console.log('email', email);
+    //console.log('password', password);
 
     let rawAuth = JSON.stringify({
-      "email": "vcummings@example.org",
-      "password": "password"
+      "email": email, //"vcummings@example.org",
+      "password": password
     });
+    //console.log('rawAuth', rawAuth);
 
     let requestOptionsAuth = {
       method: 'POST',
@@ -40,6 +45,11 @@ function App() {
     fetch(process.env.REACT_APP_BACKEND + "users/login", requestOptionsAuth)
         .then(response => response.json())
         .then(result => localStorage.setItem('access_token', result.token))
+  }
+
+  //console.log(localStorage.getItem('access_token'));
+  if(localStorage.getItem('access_token') === null || localStorage.getItem('access_token') === 'undefined') {
+    <Redirect to="/login" />
   }
 
   let myHeaders = new Headers();
@@ -97,7 +107,7 @@ function App() {
             <About />
           </Route>
           <Route path="/login">
-            <Login />
+            <Login onLogin={login}/>
           </Route>
         </Switch>
       </div>
