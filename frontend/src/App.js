@@ -1,53 +1,131 @@
-import logo from './logo.svg';
-import './App.css';
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { useEffect, useState } from 'react';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import FolderIcon from '@material-ui/icons/Folder';
 import RestoreIcon from '@material-ui/icons/Restore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import Login from './pages/Login';
 
-const useStyles = makeStyles({
-  root: {
-    width: 500,
-  },
-});
 
 
 function App() {
-  const classes = useStyles();
-  const [value, setValue] = React.useState('recents');
+  const [navValue, setNavValue] = useState('recents');
+  const [tests, setTests] = useState([]);
+
+  console.log(localStorage.getItem('access_token'));
+  if(localStorage.getItem('access_token') === null || localStorage.getItem('access_token') === 'undefined') {
+    let myHeadersAuth = new Headers();
+    myHeadersAuth.append("Content-Type", "application/json");
+
+    let rawAuth = JSON.stringify({
+      "email": "vcummings@example.org",
+      "password": "password"
+    });
+
+    let requestOptionsAuth = {
+      method: 'POST',
+      headers: myHeadersAuth,
+      body: rawAuth,
+      redirect: 'follow'
+    };
+
+    fetch(process.env.REACT_APP_BACKEND + "users/login", requestOptionsAuth)
+        .then(response => response.json())
+        .then(result => localStorage.setItem('access_token', result.token))
+  }
+
+  let myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + localStorage.getItem('access_token'));
+
+    let requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+    };
+
+  useEffect(() => {
+        fetch(process.env.REACT_APP_BACKEND + "tests", requestOptions)
+        .then(response => response.json())
+        .then(result => setTests(result.data))
+    }, []);
+
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setNavValue(newValue);
   };
   
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+      <div>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        </ul>
 
-      <BottomNavigation value={value} onChange={handleChange} className={classes.root}>
+        <hr />
+
+        {/*
+          A <Switch> looks through all its children <Route>
+          elements and renders the first one whose path
+          matches the current URL. Use a <Switch> any time
+          you have multiple routes, but you want only one
+          of them to render at a time
+        */}
+        <Switch>
+          <Route exact path="/">
+            <Home />
+            {tests.map(d => (<li key={d.id}>{d.id}: {d.name}</li>))} 
+
+          </Route>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+    <hr />
+      <BottomNavigation value={navValue} onChange={handleChange}>
         <BottomNavigationAction label="Recents" value="recents" icon={<RestoreIcon />} />
         <BottomNavigationAction label="Favorites" value="favorites" icon={<FavoriteIcon />} />
         <BottomNavigationAction label="Nearby" value="nearby" icon={<LocationOnIcon />} />
         <BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon />} />
       </BottomNavigation>
 
+    </div>
+  );
+}
+
+function Home() {
+  return (
+    <div>
+      <h2>Home</h2>
+    </div>
+  );
+}
+
+function About() {
+  return (
+    <div>
+      <h2>About</h2>
     </div>
   );
 }
