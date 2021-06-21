@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\ApiController;
 use App\Models\TestManufacturer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class TestManufacturerController extends Controller
+class TestManufacturerController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -17,12 +17,7 @@ class TestManufacturerController extends Controller
     public function index()
     {
         $manufacturers = TestManufacturer::all();
-
-        return response()->json([
-            "success" => true,
-            "message" => "Test Manufacturer List",
-            "data" => $manufacturers
-            ]);
+        return $this->successResponse($manufacturers,'Test Manufacturer List');
     }
 
     /**
@@ -39,22 +34,14 @@ class TestManufacturerController extends Controller
         );
 
         if($validator->fails()){
-            return response()->json([
-            "success" => false,
-            "message" => "Validation Error",
-            "data" => $validator->errors()
-            ], 501);
+            return $this->errorResponse($validator->errors(), 422);
         }
 
         $manufacturer = new TestManufacturer();
         $manufacturer->fill($request->all());
         $manufacturer->save();
 
-        return response()->json([
-            "success" => true,
-            "message" => "Test Manufacturer created successfully",
-            "data" => $manufacturer
-            ]);
+        return $this->successResponse($manufacturer,'Test Manufacturer created successfully', 201);
     }
 
     /**
@@ -67,16 +54,9 @@ class TestManufacturerController extends Controller
     {
         $manufacturer = TestManufacturer::find($id);
         if (is_null($manufacturer)) {
-            return response()->json([
-            "success" => false,
-            "message" => "Test Manufacturer not found",
-            ], 404);
+            return $this->errorResponse("Test Manufacturer not found", 404);
         }
-        return response()->json([
-            "success" => true,
-            "message" => "Test Manufacturer retrieved successfully.",
-            "data" => $manufacturer
-            ]);
+        return $this->successResponse($manufacturer,'Test Manufacturer retrieved successfully');
     }
 
     /**
@@ -94,28 +74,17 @@ class TestManufacturerController extends Controller
         );
 
         if($validator->fails()){
-            return response()->json([
-            "success" => false,
-            "message" => "Validation Error",
-            "data" => $validator->errors()
-            ], 501);
+            return $this->errorResponse($validator->errors(), 422);
         }
 
         $manufacturer = TestManufacturer::find($id);
         if (is_null($manufacturer)) {
-            return response()->json([
-            "success" => false,
-            "message" => "Test Manufacturer not found",
-            ], 404);
+            return $this->errorResponse("Test Manufacturer not found", 404);
         }
         $manufacturer->fill($request->all());
         $manufacturer->update();
 
-        return response()->json([
-            "success" => true,
-            "message" => "Test Manufacturer updated successfully",
-            "data" => $manufacturer
-            ]);
+        return $this->successResponse($manufacturer,'Test Manufacturer updated successfully');
     }
 
     /**
@@ -128,16 +97,9 @@ class TestManufacturerController extends Controller
     {
         $manufacturer = TestManufacturer::find($id);
         if (is_null($manufacturer)) {
-            return response()->json([
-            "success" => false,
-            "message" => "Test Manufacturer not found",
-            ], 404);
+            return $this->errorResponse("Test Manufacturer not found", 404);
         }
         $manufacturer->delete();
-        return response()->json([
-            "success" => true,
-            "message" => "Test Manufacturer deleted successfully.",
-            "data" => $manufacturer
-            ]);
+        return $this->successResponse(null, 'Test Manufacturer Deleted');
     }
 }

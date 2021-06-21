@@ -18,11 +18,7 @@ class TestStationController extends Controller
     {
         $stations = TestStation::all();
 
-        return response()->json([
-            "success" => true,
-            "message" => "Test Station List",
-            "data" => $stations
-            ]);
+        return $this->successResponse($stations);
     }
 
     /**
@@ -53,22 +49,14 @@ class TestStationController extends Controller
         );
 
         if($validator->fails()){
-            return response()->json([
-            "success" => false,
-            "message" => "Validation Error",
-            "data" => $validator->errors()
-            ], 501);
+            return $this->errorResponse($validator->errors(), 422);
         }
 
         $station = new TestStation();
         $station->fill($request->all());
         $station->save();
 
-        return response()->json([
-            "success" => true,
-            "message" => "Test Station created successfully",
-            "data" => $station
-            ]);
+        return $this->successResponse($station, 'Test Station created successfully', 201);
     }
 
     /**
@@ -81,16 +69,9 @@ class TestStationController extends Controller
     {
         $station = TestStation::find($id);
         if (is_null($station)) {
-            return response()->json([
-            "success" => false,
-            "message" => "Test Station not found",
-            ], 404);
+            return $this->errorResponse("Test Station not found", 404);
         }
-        return response()->json([
-            "success" => true,
-            "message" => "Test Station retrieved successfully.",
-            "data" => $station
-            ]);
+        return $this->successResponse($station, "Test station received successfully");
     }
 
     /**
@@ -121,28 +102,17 @@ class TestStationController extends Controller
         );
 
         if($validator->fails()){
-            return response()->json([
-            "success" => false,
-            "message" => "Validation Error",
-            "data" => $validator->errors()
-            ], 501);
+            return $this->errorResponse($validator->errors(), 422);
         }
 
         $station = TestStation::find($id);
         if (is_null($station)) {
-            return response()->json([
-            "success" => false,
-            "message" => "Test Station not found",
-            ], 404);
+            return $this->errorResponse("Test Station not found", 404);
         }
         $station->fill($request->all());
         $station->update();
 
-        return response()->json([
-            "success" => true,
-            "message" => "Test Station updated successfully",
-            "data" => $station
-            ]);
+        return $this->successResponse($station, "Test Station updated successfully");
     }
 
     /**
@@ -155,16 +125,9 @@ class TestStationController extends Controller
     {
         $station = TestStation::find($id);
         if (is_null($station)) {
-            return response()->json([
-            "success" => false,
-            "message" => "Test Station not found",
-            ], 404);
+            return $this->errorResponse("Test Station not found", 404);
         }
         $station->delete();
-        return response()->json([
-            "success" => true,
-            "message" => "Test Station deleted successfully.",
-            "data" => $station
-            ]);
+        return $this->successResponse(NULL, "Test Station deleted successfully");
     }
 }

@@ -34,6 +34,17 @@ class EditPassportForUserIdUuid extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('oauth_access_tokens', function (Blueprint $table) {
+            $table->dropColumn('user_id');
+        });
+        Schema::table('oauth_access_tokens', function (Blueprint $table) {
+            $table->string('user_id')->index()->nullable();
+        });
+        Schema::table('oauth_clients', function (Blueprint $table) {
+            $table->dropColumn('user_id');
+        });
+        Schema::table('oauth_clients', function (Blueprint $table) {
+            $table->string('user_id')->index()->nullable();
+        });
     }
 }

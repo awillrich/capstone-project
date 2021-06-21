@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\ApiController;
 use App\Models\Test;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
-class TestController extends Controller
+class TestController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +18,7 @@ class TestController extends Controller
     {
         $tests = Test::all();
 
-        return response()->json([
-            "success" => true,
-            "message" => "Test List",
-            "data" => $tests
-            ]);
+        return $this->successResponse($tests);
     }
 
     /**
@@ -73,11 +69,7 @@ class TestController extends Controller
         );
 
         if($validator->fails()){
-            return response()->json([
-            "success" => false,
-            "message" => "Validation Error",
-            "data" => $validator->errors()
-            ], 501);
+            return $this->errorResponse($validator->errors(), 422);
         }
 
         $test = new Test();
@@ -85,11 +77,7 @@ class TestController extends Controller
         $test->number = $this->createCurrentNumber($request['test_station']);
         $test->save();
 
-        return response()->json([
-            "success" => true,
-            "message" => "Test created successfully",
-            "data" => $test
-            ]);
+        return $this->successResponse($test,'Test created successfully', 201);
     }
 
     /**
@@ -100,18 +88,13 @@ class TestController extends Controller
      */
     public function show($id)
     {
-        $test = Test::find($id);
+        $test = Test::findOrFail($id);
         if (is_null($test)) {
-            return response()->json([
-            "success" => false,
-            "message" => "Test not found",
-            ], 404);
+            return $this->errorResponse("Test not found", 404);
         }
-        return response()->json([
-            "success" => true,
-            "message" => "Test retrieved successfully.",
-            "data" => $test
-            ]);
+
+        return $this->successResponse($test);
+
     }
 
     /**
@@ -163,29 +146,18 @@ class TestController extends Controller
         );
 
         if($validator->fails()){
-            return response()->json([
-            "success" => false,
-            "message" => "Validation Error",
-            "data" => $validator->errors()
-            ], 501);
+            return $this->errorResponse($validator->errors(), 422);
         }
 
         $test = Test::find($id);
         if (is_null($test)) {
-            return response()->json([
-            "success" => false,
-            "message" => "Test not found",
-            ], 404);
+            return $this->errorResponse("Test not found", 404);
         }
         $test->fill($request->all());
         $test->number = $this->createCurrentNumber($request['test_station']);
         $test->update();
 
-        return response()->json([
-            "success" => true,
-            "message" => "Test updated successfully",
-            "data" => $test
-            ]);
+        return $this->successResponse($test,'Test updated successfully', 201);
     }
 
     /**
@@ -198,17 +170,10 @@ class TestController extends Controller
     {
         $test = Test::find($id);
         if (is_null($test)) {
-            return response()->json([
-            "success" => false,
-            "message" => "Test not found",
-            ], 404);
+            return $this->errorResponse("Test not found", 404);
         }
         $test->delete();
-        return response()->json([
-            "success" => true,
-            "message" => "Test deleted successfully.",
-            "data" => $test
-            ]);
+        return $this->successResponse(null, 'Test Deleted');
     }
 
     function createCurrentNumber($test_station) {

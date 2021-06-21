@@ -28,11 +28,11 @@ Route::group([
         Route::resource('tests', ApiTestController::class);
         Route::resource('test_stations', ApiTestStationController::class);
         Route::resource('test_manufacturers', ApiTestManufacturerController::class);
+        Route::get('/view-profile', [ApiUserController::class, 'viewProfile'])->name('profile.user');
+        Route::get('/logout', [ApiUserController::class, 'logout'])->name('logout.user');
 });
 
 Route::group(['prefix' => 'users', 'middleware' => 'cors'], function ($router) {
-Route::post('/register', [ApiUserController::class, 'register'])->name('register.user');
-Route::post('/login', [ApiUserController::class, 'login'])->name('login.user');
-Route::get('/view-profile', [ApiUserController::class, 'viewProfile'])->name('profile.user');
-Route::get('/logout', [ApiUserController::class, 'logout'])->name('logout.user');
+    Route::post('/register', [ApiUserController::class, 'register'])->name('register.user');
+    Route::post('/login', [ApiUserController::class, 'login'])->name('login.user');
 });
