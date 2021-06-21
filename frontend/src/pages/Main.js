@@ -6,7 +6,6 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import ArchiveIcon from '@material-ui/icons/Archive';
 import AddIcon from '@material-ui/icons/Add';
 import AlarmIcon from '@material-ui/icons/Alarm';
@@ -16,8 +15,9 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import MailIcon from "@material-ui/icons/Mail";
+import PersonIcon from '@material-ui/icons/Person';
 import MenuIcon from "@material-ui/icons/Menu";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -104,10 +104,10 @@ function Main(props, onLoginApp ) {
         <ListItemLink button to="/tests/running" primary="Laufende Tests" icon={<AlarmIcon />} />
         <ListItemLink button to="/tests/today" primary="Heutige Tests" icon={<CalendarTodayIcon />} />
         <ListItemLink button to="/tests/certificate" primary="Bestätigung" icon={<InsertDriveFileIcon />} />
-        <ListItemLink button to="/tests" primary="Archiv" icon={<ArchiveIcon />} />
+        <ListItemLink button to="/tests/archive" primary="Archiv" icon={<ArchiveIcon />} />
       <Divider />
-        <ListItemLink button to="/inbox" primary="Inbox" icon={<InboxIcon />} />
-        <ListItemLink button to="/starred" primary="Starred" icon={<MailIcon />} />
+        <ListItemLink button to="/profile" primary="Profil" icon={<PersonIcon />} />
+        <ListItemLink button to="/logout" primary="Logout" icon={<ExitToAppIcon />} />
       </List>
     </div>
   );
@@ -198,9 +198,8 @@ function Main(props, onLoginApp ) {
             <Route path="/login"> 
               <Login onLogin={login}></Login> 
             </Route>
-            <PrivateRoute path="/tests/today" component={TestList} />
             <Route path="/tests/create" component={TestForm} />
-            <Route path="/tests/:period" component={TestList} />
+            <PrivateRoute path="/tests/:period" component={TestList} />
           </Switch>
         </main>
       </BrowserRouter>
