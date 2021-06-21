@@ -1,4 +1,3 @@
-import styled from 'styled-components'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -9,8 +8,6 @@ export default function Login({ onLogin }) {
         const form = event.target;
         const login_email = form.login_email;
         const login_password = form.login_password;
-        console.log(login_email.value);
-        console.log(login_password.value);
         onLogin([login_email.value, login_password.value]);
         form.reset();
         login_email.focus();
@@ -29,8 +26,3 @@ export default function Login({ onLogin }) {
     </div>
   );
 }
-
-const Wrapper = styled.section`
-  padding: 4em;
-  background: papayawhip;
-`;
