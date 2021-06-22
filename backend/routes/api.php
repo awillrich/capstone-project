@@ -19,13 +19,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([
         'middleware' => ['auth:api', 'cors'],
-    ], function ($router) {
-        Route::resource('tests', ApiTestController::class);
-        Route::resource('test_stations', ApiTestStationController::class);
-        Route::resource('test_manufacturers', ApiTestManufacturerController::class);
-        Route::get('/view-profile', [ApiUserController::class, 'viewProfile'])->name('profile.user');
-        Route::get('/logout', [ApiUserController::class, 'logout'])->name('logout.user');
-});
+        ], function ($router) {
+            Route::resource('tests', ApiTestController::class);
+            Route::resource('test_stations', ApiTestStationController::class);
+            Route::resource('test_manufacturers', ApiTestManufacturerController::class);
+            Route::get('/view-profile', [ApiUserController::class, 'viewProfile'])->name('profile.user');
+            Route::get('/logout', [ApiUserController::class, 'logout'])->name('logout.user');
+        }
+    );
 
 Route::group(['prefix' => 'users', 'middleware' => 'cors'], function ($router) {
     Route::post('/register', [ApiUserController::class, 'register'])->name('register.user');

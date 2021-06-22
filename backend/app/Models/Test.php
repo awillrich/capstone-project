@@ -22,12 +22,12 @@ class Test extends Model
         'deleted_at',
     ];
 
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'date',
-        'dob',
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'date' => 'date',
+        'dob' => 'date',
     ];
 
     public function test_station() {
