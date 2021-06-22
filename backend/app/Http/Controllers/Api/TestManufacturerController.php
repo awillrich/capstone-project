@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\TestManufacturerRequest;
 use App\Models\TestManufacturer;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class TestManufacturerController extends ApiController
 {
@@ -26,15 +25,10 @@ class TestManufacturerController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TestManufacturerRequest $request)
     {
-        $validator = Validator::make($request->all(),
-            ['name' => 'string|required',
-            'pzn' => 'string|required',],
-        );
-
-        if($validator->fails()){
-            return $this->errorResponse($validator->errors(), 422);
+        if (isset($request->validator) && $request->validator->fails()) {
+            return $this->errorResponse($request->validator->errors(), 422);
         }
 
         $manufacturer = new TestManufacturer();
@@ -52,10 +46,7 @@ class TestManufacturerController extends ApiController
      */
     public function show($id)
     {
-        $manufacturer = TestManufacturer::find($id);
-        if (is_null($manufacturer)) {
-            return $this->errorResponse("Test Manufacturer not found", 404);
-        }
+        $manufacturer = TestManufacturer::findOrFail($id);
         return $this->successResponse($manufacturer,'Test Manufacturer retrieved successfully');
     }
 
@@ -66,21 +57,13 @@ class TestManufacturerController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TestManufacturerRequest $request, $id)
     {
-        $validator = Validator::make($request->all(),
-            ['name' => 'string',
-            'pzn' => 'string',],
-        );
-
-        if($validator->fails()){
-            return $this->errorResponse($validator->errors(), 422);
+        if (isset($request->validator) && $request->validator->fails()) {
+            return $this->errorResponse($request->validator->errors(), 422);
         }
 
-        $manufacturer = TestManufacturer::find($id);
-        if (is_null($manufacturer)) {
-            return $this->errorResponse("Test Manufacturer not found", 404);
-        }
+        $manufacturer = TestManufacturer::findOrFail($id);
         $manufacturer->fill($request->all());
         $manufacturer->update();
 
@@ -95,10 +78,7 @@ class TestManufacturerController extends ApiController
      */
     public function destroy($id)
     {
-        $manufacturer = TestManufacturer::find($id);
-        if (is_null($manufacturer)) {
-            return $this->errorResponse("Test Manufacturer not found", 404);
-        }
+        $manufacturer = TestManufacturer::findOrFail($id);
         $manufacturer->delete();
         return $this->successResponse(null, 'Test Manufacturer Deleted');
     }

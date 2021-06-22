@@ -4,7 +4,6 @@ use App\Http\Controllers\Api\TestController as ApiTestController;
 use App\Http\Controllers\Api\TestManufacturerController as ApiTestManufacturerController;
 use App\Http\Controllers\Api\TestStationController as ApiTestStationController;
 use App\Http\Controllers\Api\UserController as ApiUserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,10 +16,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::group([
         'middleware' => ['auth:api', 'cors'],

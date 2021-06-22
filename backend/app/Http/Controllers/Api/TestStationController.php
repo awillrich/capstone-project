@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TestStationRequest;
 use App\Models\TestStation;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class TestStationController extends Controller
 {
@@ -27,29 +26,10 @@ class TestStationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TestStationRequest $request)
     {
-        #return $request;
-        $validator = Validator::make($request->all(),
-            ['number' => 'string|required',
-            'sign' => 'string|required',
-            'name' => 'string|required',
-            'street' => 'string|required',
-            'zip' => 'string|required',
-            'city' => 'string|required',
-            'phone' => 'string|required',
-            'email' => 'email:rfc,dns|required',
-            'bsnr' => 'string',
-            'email_leader' => 'string|required',
-            'email_health_department' => 'string|required',
-            'use_certificate_email' => 'boolean',
-            'use_certificate_online' => 'boolean',
-            'use_certificate_cwa' => 'boolean',
-        ],
-        );
-
-        if($validator->fails()){
-            return $this->errorResponse($validator->errors(), 422);
+        if (isset($request->validator) && $request->validator->fails()) {
+            return $this->errorResponse($request->validator->errors(), 422);
         }
 
         $station = new TestStation();
@@ -67,10 +47,7 @@ class TestStationController extends Controller
      */
     public function show($id)
     {
-        $station = TestStation::find($id);
-        if (is_null($station)) {
-            return $this->errorResponse("Test Station not found", 404);
-        }
+        $station = TestStation::findOrFail($id);
         return $this->successResponse($station, "Test station received successfully");
     }
 
@@ -81,34 +58,13 @@ class TestStationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TestStationRequest $request, $id)
     {
-        $validator = Validator::make($request->all(),
-            ['number' => 'string',
-            'sign' => 'string',
-            'name' => 'string',
-            'street' => 'string',
-            'zip' => 'string',
-            'city' => 'string',
-            'phone' => 'string',
-            'email' => 'email:rfc,dns',
-            'bsnr' => 'string',
-            'email_leader' => 'string',
-            'email_health_department' => 'string',
-            'use_certificate_email' => 'boolean',
-            'use_certificate_online' => 'boolean',
-            'use_certificate_cwa' => 'boolean',
-        ],
-        );
-
-        if($validator->fails()){
-            return $this->errorResponse($validator->errors(), 422);
+        if (isset($request->validator) && $request->validator->fails()) {
+            return $this->errorResponse($request->validator->errors(), 422);
         }
 
-        $station = TestStation::find($id);
-        if (is_null($station)) {
-            return $this->errorResponse("Test Station not found", 404);
-        }
+        $station = TestStation::findOrFail($id);
         $station->fill($request->all());
         $station->update();
 
@@ -123,10 +79,7 @@ class TestStationController extends Controller
      */
     public function destroy($id)
     {
-        $station = TestStation::find($id);
-        if (is_null($station)) {
-            return $this->errorResponse("Test Station not found", 404);
-        }
+        $station = TestStation::findOrFail($id);
         $station->delete();
         return $this->successResponse(NULL, "Test Station deleted successfully");
     }

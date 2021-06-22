@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\TestRequest;
 use App\Models\Test;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -27,49 +28,10 @@ class TestController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TestRequest $request)
     {
-        $validator = Validator::make($request->all(),
-            ['test_station' => 'uuid|required',
-            'appointment' => 'datetime',
-            'type' => 'string|required',
-            'name' => 'string|min:2|max:50|required',
-            'firstname' => 'string|min:2|max:50|required',
-            'street' => 'string|min:1|max:50|required',
-            'zip' => 'string|min:1|max:10|required',
-            'city' => 'string|min:2|max:50|required',
-            'phone' => 'string|min:5|max:30|required',
-            'email' => 'email:rfc,dns',
-            'dob' => 'date|required',
-            'date' => 'date|required',
-            'certificate_offline' => 'boolean',
-            'certificate_email' => 'boolean',
-            'certificate_online' => 'boolean',
-            'certificate_cwa_personal' => 'boolean',
-            'certificate_cwa_anonym' => 'boolean',
-            'test_manufacturer_id' => 'uuid',
-            'test_charge' => 'string|min:1|max:20',
-            'test_result' => 'string|min:1|max:10',
-            'time_register' => 'time',
-            'time_reception' => 'time',
-            'time_test' => 'time',
-            'time_evaluation' => 'time',
-            'time_email_notification' => 'time',
-            'time_positive_leader' => 'time',
-            'time_health_department' => 'time',
-            'time_health_department_confirmation' => 'time',
-            'time_certificate' => 'time',
-            'result_uuid' => 'uuid',
-            'result_url' => 'string|min:1|max:255',
-            'result_cwa_salt' => 'string|min:1|max:255',
-            'result_cwa_hash' => 'string|min:1',
-            'result_cwa_url' => 'string|min:1|max:255',
-            'customer_id' => 'uuid',
-            'company_id' => 'uuid'],
-        );
-
-        if($validator->fails()){
-            return $this->errorResponse($validator->errors(), 422);
+        if (isset($request->validator) && $request->validator->fails()) {
+            return $this->errorResponse($request->validator->errors(), 422);
         }
 
         $test = new Test();
@@ -89,10 +51,6 @@ class TestController extends ApiController
     public function show($id)
     {
         $test = Test::findOrFail($id);
-        if (is_null($test)) {
-            return $this->errorResponse("Test not found", 404);
-        }
-
         return $this->successResponse($test);
 
     }
@@ -104,55 +62,13 @@ class TestController extends ApiController
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TestRequest $request, $id)
     {
-        $validator = Validator::make($request->all(),
-            ['test_station' => 'uuid',
-            'appointment' => 'datetime',
-            'type' => 'string',
-            'name' => 'string|min:2|max:50',
-            'firstname' => 'string|min:2|max:50',
-            'street' => 'string|min:1|max:50',
-            'zip' => 'string|min:1|max:10',
-            'city' => 'string|min:2|max:50',
-            'phone' => 'string|min:5|max:30',
-            'email' => 'email:rfc,dns',
-            'dob' => 'date',
-            'date' => 'date',
-            'certificate_offline' => 'boolean',
-            'certificate_email' => 'boolean',
-            'certificate_online' => 'boolean',
-            'certificate_cwa_personal' => 'boolean',
-            'certificate_cwa_anonym' => 'boolean',
-            'test_manufacturer_id' => 'uuid',
-            'test_charge' => 'string|min:1|max:20',
-            'test_result' => 'string|min:1|max:10',
-            'time_register' => 'string|min:1|max:10',
-            'time_reception' => 'time',
-            'time_test' => 'time',
-            'time_evaluation' => 'time',
-            'time_email_notification' => 'time',
-            'time_positive_leader' => 'time',
-            'time_health_department' => 'time',
-            'time_health_department_confirmation' => 'time',
-            'time_certificate' => 'time',
-            'result_uuid' => 'uuid',
-            'result_url' => 'string|min:1|max:255',
-            'result_cwa_salt' => 'string|min:1|max:255',
-            'result_cwa_hash' => 'string|min:1',
-            'result_cwa_url' => 'string|min:1|max:255',
-            'customer_id' => 'uuid',
-            'company_id' => 'uuid'],
-        );
-
-        if($validator->fails()){
+        /*if($validator->fails()){
             return $this->errorResponse($validator->errors(), 422);
-        }
+        }*/
 
-        $test = Test::find($id);
-        if (is_null($test)) {
-            return $this->errorResponse("Test not found", 404);
-        }
+        $test = Test::findOrFail($id);
         $test->fill($request->all());
         $test->number = $this->createCurrentNumber($request['test_station']);
         $test->update();
@@ -168,10 +84,7 @@ class TestController extends ApiController
      */
     public function destroy($id)
     {
-        $test = Test::find($id);
-        if (is_null($test)) {
-            return $this->errorResponse("Test not found", 404);
-        }
+        $test = Test::findOrFail($id);
         $test->delete();
         return $this->successResponse(null, 'Test Deleted');
     }
