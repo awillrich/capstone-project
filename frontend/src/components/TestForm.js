@@ -3,9 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -23,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -36,7 +35,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          <Typography component={'span'}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -50,14 +49,54 @@ function a11yProps(index) {
   };
 }
 
-export default function TestForm() {
-  const [value, setValue] = React.useState(0);
+export default function TestForm({ onSubmit }) {
+  const mustertest = {
+        "id": "",
+        "number": "",
+        "test_station": "17c0c1ae-a82a-4ab0-ba16-6cce80dc06fa",
+        "state": "registration",
+        "appointment": null,
+        "type": "preregistration",
+        "name": "Mustermann",
+        "firstname": "Max",
+        "street": "Hauptstraße",
+        "zip": "67433",
+        "city": "Neustadt",
+        "phone": "06321",
+        "email": "aaa",
+        "dob": "2012-01-15T00:00:00.000000Z",
+        "date": "2021-06-09T00:00:00.000000Z",
+        "certificate_offline": 1,
+        "certificate_email": 0,
+        "certificate_online": 0,
+        "certificate_cwa_personal": 0,
+        "certificate_cwa_anonym": 0,
+        "test_manufacturer_id": 1,
+        "test_charge": "aaa",
+        "test_result": null,
+        "time_register": null,
+        "time_reception": null,
+        "time_test": null,
+        "time_evaluation": null,
+        "time_email_notification": null,
+        "time_positive_leader": null,
+        "time_health_department": null,
+        "time_health_department_confirmation": null,
+        "time_certificate": null,
+        "result_uuid": null,
+        "result_url": null,
+        "result_cwa_salt": null,
+        "result_cwa_hash": null,
+        "result_cwa_url": null,
+        "customer_id": null,
+        "company_id": null,
+        "created_at": "2021-06-22T11:56:13.000000Z",
+        "updated_at": "2021-06-22T11:56:13.000000Z",
+        "deleted_at": null
+    };
+  const [test, setTest] = React.useState(mustertest);
+  const [TabValue, setTabValue] = React.useState(0);
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-  });
-  const [age, setAge] = React.useState('');
   const [currency, setCurrency] = React.useState('no');
   const cwaOptions = [
   {
@@ -89,63 +128,84 @@ export default function TestForm() {
 ];
 
   const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+    setTest({ ...test, [event.target.name]: event.target.checked });
+  };
+
+  const handleFormChange = (event) => {
+    setTest({ ...test, [event.target.name]: event.target.value });
   };
 
   const handleTabChange = (event, newValue) => {
-    setValue(newValue);
+    setTabValue(newValue);
   };
 
+  function handleSubmit(event) {
+    event.preventDefault()
+    console.log('submit TestForm');
+    onSubmit(test);
+  }
+
   return (
-    <form className={classes.root} noValidate autoComplete="off">
+    <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
       <AppBar position="static">
-      <Tabs value={value} onChange={handleTabChange} aria-label="simple tabs example">
+      <Tabs value={TabValue} onChange={handleTabChange} aria-label="simple tabs example">
         <Tab label="Stammdaten" {...a11yProps(0)} />
         <Tab label="Zeiten" {...a11yProps(1)} />
         <Tab label="Aktionen" {...a11yProps(2)} />
       </Tabs>
     </AppBar>
-    <TabPanel value={value} index={0}>
+    <TabPanel value={TabValue} index={0}>
       <div>
         <TextField
           disabled
-          id="outlined-required"
-          value="123"
+          id="number"
+          name="number"
+          value={test.number}
           label="Nummer"
           variant="outlined"
         />
         <TextField
           disabled
-          id="outlined-disabled"
+          id="id"
+          name="id"
           label="ID"
-          value="17c0c1ae-a82a-4ab0-ba16-6cce80dc06fa"
+          value={test.id}
           variant="outlined"
         />
         <TextField
           disabled
-          id="outlined-disabled"
+          id="customer_id"
+          name="customer_id"
           label="Stammkunden ID"
-          value="17c0c1ae-a82a-4ab0-ba16-6cce80dc06fa"
+          value={test.customer_id}
           variant="outlined"
         />
       </div>
       <div>
         <TextField
           required
-          id="outlined-required"
+          id="name"
+          name="name"
+          onChange={handleFormChange}
           label="Name"
+          value={test.name}
           variant="outlined"
         />
         <TextField
           required
           id="outlined-disabled"
           label="Vorname"
+          name="firstname"
+          value={test.firstname}
+          onChange={handleFormChange}
           variant="outlined"
         />
         <TextField
           required
           id="outlined-disabled"
+          //type="date"
           label="Geburtsdatum"
+          value={test.dob}
           variant="outlined"
         />
       </div>
@@ -154,12 +214,14 @@ export default function TestForm() {
           required
           id="outlined-required"
           label="Straße"
+          value={test.street}
           variant="outlined"
         />
         <TextField
           required
           id="outlined-disabled"
           label="Telefon"
+          value={test.phone}
           variant="outlined"
         />
       </div>
@@ -168,17 +230,20 @@ export default function TestForm() {
           required
           id="outlined-required"
           label="PLZ"
+          value={test.zip}
           variant="outlined"
         />
         <TextField
           required
           id="outlined-disabled"
           label="Ort"
+          value={test.city}
           variant="outlined"
         />
         <TextField 
           id="outlined-disabled"
           label="E-Mail"
+          value={(test.email === null) ? "" : test.email}
           variant="outlined"
         />
       </div>
@@ -215,9 +280,9 @@ export default function TestForm() {
           ))}
         </TextField>
         <TextField
-          required
           id="outlined-required"
           label="Charge"
+          value={(test.test_charge === null) ? "" : test.test_charge}
           variant="outlined"
         />
       </div>
@@ -225,9 +290,9 @@ export default function TestForm() {
         <FormControlLabel
         control={
           <Switch
-            checked={state.checkedB}
+            checked={Boolean(Number(test.certificate_email))}
             onChange={handleChange}
-            name="email_notification"
+            name="certificate_email"
             color="primary"
           />
         }
@@ -236,9 +301,9 @@ export default function TestForm() {
         <FormControlLabel
         control={
           <Switch
-            checked={state.checkedB}
+            checked={Boolean(Number(test.certificate_offline))}
             onChange={handleChange}
-            name="email_notification"
+            name="certificate_offline"
             color="primary"
           />
         }
@@ -246,14 +311,14 @@ export default function TestForm() {
       />
       </div>
     </TabPanel>
-    <TabPanel value={value} index={1}>
+    <TabPanel value={TabValue} index={1}>
       <div>
         <TextField
           id="time"
           label="Registrierung"
           type="time"
           disabled
-          defaultValue="07:30"
+          value={test.time_register}
           className={classes.textField}
           InputLabelProps={{
             shrink: true,
@@ -267,7 +332,7 @@ export default function TestForm() {
           label="Rezeption"
           type="time"
           disabled
-          defaultValue="07:30"
+          value={test.time_reception}
           className={classes.textField}
           InputLabelProps={{
             shrink: true,
@@ -282,7 +347,7 @@ export default function TestForm() {
           id="time"
           label="Test Start"
           type="time"
-          defaultValue="07:30"
+          value={test.time_test}
           className={classes.textField}
           InputLabelProps={{
             shrink: true,
@@ -295,7 +360,7 @@ export default function TestForm() {
           id="time"
           label="Test Auswertung"
           type="time"
-          defaultValue="07:30"
+          value={test.time_evaluation}
           className={classes.textField}
           InputLabelProps={{
             shrink: true,
@@ -309,7 +374,7 @@ export default function TestForm() {
           select
           required
           label="Ergebnis"
-          value={currency}
+          value={test.test_result}
           onChange={handleChange}
           variant="outlined"
         >
@@ -334,7 +399,7 @@ export default function TestForm() {
           label="E-Mail Benachrichtigung"
           type="time"
           disabled
-          defaultValue="07:30"
+          value={test.time_email_notification}
           className={classes.textField}
           InputLabelProps={{
             shrink: true,
@@ -347,7 +412,7 @@ export default function TestForm() {
           id="time"
           label="Info Teamleitung"
           type="time"
-          defaultValue="07:30"
+          value={test.time_positive_leader}
           className={classes.textField}
           disabled
           InputLabelProps={{
@@ -363,7 +428,7 @@ export default function TestForm() {
           id="time"
           label="Info Gesundheitsamt"
           type="time"
-          defaultValue="07:30"
+          value={test.time_health_department}
           disabled
           className={classes.textField}
           InputLabelProps={{
@@ -378,7 +443,7 @@ export default function TestForm() {
           disabled
           label="Bestätigung Gesundheitsamt "
           type="time"
-          defaultValue="07:30"
+          value={test.time_health_department_confirmation}
           className={classes.textField}
           InputLabelProps={{
             shrink: true,
@@ -390,7 +455,7 @@ export default function TestForm() {
       </div>
       
     </TabPanel>
-    <TabPanel value={value} index={2}>
+    <TabPanel value={TabValue} index={2}>
       <div>
         <Button variant="contained">Test Start</Button>
       </div>
@@ -408,6 +473,9 @@ export default function TestForm() {
       </div>
 
     </TabPanel>
+    <Button variant="contained" color="primary" type="submit">
+      Speichern
+    </Button>
     </form>
   );
 }

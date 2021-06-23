@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Main(props, onLoginApp ) {
+function Main(props) {
   const { container } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -138,6 +138,10 @@ function Main(props, onLoginApp ) {
         })
   }
 
+  function handleNewTestForm(testform) {
+    console.log(testform)
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -193,13 +197,17 @@ function Main(props, onLoginApp ) {
           <div className={classes.toolbar} />
 
           <Switch>
-            <Route exact path="/" render={() => <div>Home Page</div>} />
-            <Route path="/Starred" render={() => <div>Page starred</div>} />
+            <Route exact path="/">
+            </Route>
             <Route path="/login"> 
               <Login onLogin={login}></Login> 
             </Route>
-            <Route path="/tests/create" component={TestForm} />
-            <PrivateRoute path="/tests/:period" component={TestList} />
+            <Route path="/tests/create" >
+              <TestForm onSubmit={handleNewTestForm}/>
+            </Route>
+            <PrivateRoute path="/tests/:period">
+              <TestList></TestList>
+            </PrivateRoute>
           </Switch>
         </main>
       </BrowserRouter>

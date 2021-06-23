@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,28 +9,53 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Pagination from '@material-ui/lab/Pagination';
+import getTests from '../lib/getTests'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+    },
+  },
   table: {
     minWidth: 650,
   },
-});
+  
+}));
 
-function createData(number, time, name, state) {
-  return { number, time, name, state };
-}
-
-const rows = [
-  createData('12345', '21.06.2021 12:59', "Mustermann, Max", 1),
-  createData('12346', '21.06.2021 12:59', "Mustermann, Max", 2),
-  createData('12347', '21.06.2021 12:59', "Mustermann, Max", 3),
-  createData('12348', '21.06.2021 12:59', "Mustermann, Max", 1),
-  createData('12349', '21.06.2021 12:59', "Mustermann, Max", 2),
-];
 
 export default function TestList() {
     let { period } = useParams();
     const classes = useStyles();
+    const [tests, setTests] = useState([]);
+    const [paginateTests, setpaginateTests] = useState([]);
+    const [page, setPage] = useState([1]);
+
+    useEffect(() => {
+      getTests(period, paginateTests, page).then((items) => {
+        const itemsFetchedFromAPI = items.data.data.map((item) => ({
+          id: item.id,
+          number: item.number,
+          time: item.date,
+          name: item.name,
+          firstname: item.firstname,
+        }));
+        setTests(itemsFetchedFromAPI);
+        const paginateAPI = items.data.links.map((item) => ({
+          url: item.url,
+          label: item.label,
+          active: item.active,
+        }));
+        //console.log(paginateAPI)
+        setpaginateTests(paginateAPI);
+      });
+    }, [period, page]);
+
+    function changePage(event, value) {
+      //console.log(value)
+      setPage(value)
+    }
 
     return (
         <div>
@@ -48,20 +74,29 @@ export default function TestList() {
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                    {rows.map((row) => (
-                        <TableRow key={row.name}>
+                    {tests.map((test) => (
+                        <TableRow key={test.id}>
                         <TableCell component="th" scope="row">
-                            {row.number}
+                            {test.number}
                         </TableCell>
-                        <TableCell>{row.time}</TableCell>
-                        <TableCell>{row.name}</TableCell>
-                        <TableCell>{row.name}</TableCell>
+                        <TableCell>{test.time}</TableCell>
+                        <TableCell>{test.name}</TableCell>
+                        <TableCell>{test.state}</TableCell>
                         <TableCell>#####</TableCell>
                         </TableRow>
                     ))}
                     </TableBody>
                 </Table>
-                </TableContainer>
+              </TableContainer>
+              
+              <div className={classes.root}>
+                <Pagination 
+                count={paginateTests.length - 2} 
+                size="small" 
+                onChange={changePage}
+                variant="outlined"
+                />
+              </div>
         </div>
     )
 }

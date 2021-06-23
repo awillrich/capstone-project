@@ -17,7 +17,7 @@ class TestController extends ApiController
      */
     public function index()
     {
-        $tests = Test::all();
+        $tests = Test::paginate(5);
 
         return $this->successResponse($tests);
     }
