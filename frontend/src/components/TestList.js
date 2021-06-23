@@ -1,7 +1,8 @@
 import React from 'react';
-import { useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { green, red, grey } from '@material-ui/core/colors';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,6 +11,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Pagination from '@material-ui/lab/Pagination';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import Tooltip from '@material-ui/core/Tooltip';
+import Buttons from './Buttons'
 import getTests from '../lib/getTests'
 
 const useStyles = makeStyles((theme) => ({
@@ -34,13 +38,15 @@ export default function TestList() {
 
     useEffect(() => {
       getTests(period, paginateTests, page).then((items) => {
-        const itemsFetchedFromAPI = items.data.data.map((item) => ({
+        const itemsFetchedFromAPI = items.data.data;
+
+        /*const itemsFetchedFromAPI = items.data.data.map((item) => ({
           id: item.id,
           number: item.number,
           time: item.date,
           name: item.name,
           firstname: item.firstname,
-        }));
+        }));*/
         setTests(itemsFetchedFromAPI);
         const paginateAPI = items.data.links.map((item) => ({
           url: item.url,
@@ -79,10 +85,27 @@ export default function TestList() {
                         <TableCell component="th" scope="row">
                             {test.number}
                         </TableCell>
-                        <TableCell>{test.time}</TableCell>
-                        <TableCell>{test.name}</TableCell>
-                        <TableCell>{test.state}</TableCell>
-                        <TableCell>#####</TableCell>
+                        <TableCell>{test.date}</TableCell>
+                        <TableCell>{test.name}, {test.firstname}</TableCell>
+                        <TableCell>
+                          <Tooltip title="Abgeschlossen">
+                            <FiberManualRecordIcon 
+                              fontSize="small" 
+                              style={{ color: green[500] }}
+                            />
+                          </Tooltip>
+                          <FiberManualRecordIcon 
+                            fontSize="small" 
+                            style={{ color: red[500] }}
+                          />
+                          <FiberManualRecordIcon 
+                            fontSize="small" 
+                            style={{ color: grey[500] }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Buttons test={test}></Buttons>
+                        </TableCell>
                         </TableRow>
                     ))}
                     </TableBody>

@@ -269,7 +269,7 @@ export default function TestForm({ onSubmit }) {
           select
           required
           label="Hersteller"
-          value={currency}
+          value={1}
           onChange={handleChange}
           variant="outlined"
         >
