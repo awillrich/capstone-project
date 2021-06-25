@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TestManufacturer extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'id',
@@ -21,7 +23,8 @@ class TestManufacturer extends Model
         'deleted_at' => 'datetime',
     ];
 
-    public function tests() {
+    public function tests()
+    {
         return $this->hasMany(Test::class);
     }
 }

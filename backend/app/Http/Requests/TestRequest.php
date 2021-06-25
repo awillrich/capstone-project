@@ -46,15 +46,15 @@ class TestRequest extends FormRequest
             'test_manufacturer_id' => 'uuid',
             'test_charge' => 'string|min:1|max:20',
             'test_result' => 'string|min:1|max:10',
-            'time_register' => 'time',
-            'time_reception' => 'time',
-            'time_test' => 'time',
-            'time_evaluation' => 'time',
-            'time_email_notification' => 'time',
-            'time_positive_leader' => 'time',
-            'time_health_department' => 'time',
-            'time_health_department_confirmation' => 'time',
-            'time_certificate' => 'time',
+            'time_register' => 'date_format:H:i:s',
+            'time_reception' => 'date_format:H:i:s',
+            'time_test' => 'date_format:H:i:s',
+            'time_evaluation' => 'date_format:H:i:s',
+            'time_email_notification' => 'date_format:H:i:s',
+            'time_positive_leader' => 'date_format:H:i:s',
+            'time_health_department' => 'date_format:H:i:s',
+            'time_health_department_confirmation' => 'date_format:H:i:s',
+            'time_certificate' => 'date_format:H:i:s',
             'result_uuid' => 'uuid',
             'result_url' => 'string|min:1|max:255',
             'result_cwa_salt' => 'string|min:1|max:255',
@@ -62,7 +62,7 @@ class TestRequest extends FormRequest
             'result_cwa_url' => 'string|min:1|max:255',
             'customer_id' => 'uuid',
             'company_id' => 'uuid'
-            ];
+        ];
     }
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)

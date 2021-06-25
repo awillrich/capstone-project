@@ -39,7 +39,7 @@ class TestController extends ApiController
         $test->number = $this->createCurrentNumber($request['test_station']);
         $test->save();
 
-        return $this->successResponse($test,'Test created successfully', 201);
+        return $this->successResponse($test, 'Test created successfully', 201);
     }
 
     /**
@@ -52,7 +52,6 @@ class TestController extends ApiController
     {
         $test = Test::findOrFail($id);
         return $this->successResponse($test);
-
     }
 
     /**
@@ -64,16 +63,11 @@ class TestController extends ApiController
      */
     public function update(TestRequest $request, $id)
     {
-        /*if($validator->fails()){
-            return $this->errorResponse($validator->errors(), 422);
-        }*/
-
         $test = Test::findOrFail($id);
         $test->fill($request->all());
-        $test->number = $this->createCurrentNumber($request['test_station']);
         $test->update();
 
-        return $this->successResponse($test,'Test updated successfully', 201);
+        return $this->successResponse($test, 'Test updated successfully', 201);
     }
 
     /**
@@ -89,7 +83,8 @@ class TestController extends ApiController
         return $this->successResponse(null, 'Test Deleted');
     }
 
-    function createCurrentNumber($test_station) {
+    function createCurrentNumber($test_station)
+    {
         return Test::where('test_station', $test_station)->max('number') + 1;
     }
 }

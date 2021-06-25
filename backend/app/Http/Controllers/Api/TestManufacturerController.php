@@ -16,7 +16,7 @@ class TestManufacturerController extends ApiController
     public function index()
     {
         $manufacturers = TestManufacturer::all();
-        return $this->successResponse($manufacturers,'Test Manufacturer List');
+        return $this->successResponse($manufacturers, 'Test Manufacturer List');
     }
 
     /**
@@ -35,7 +35,7 @@ class TestManufacturerController extends ApiController
         $manufacturer->fill($request->all());
         $manufacturer->save();
 
-        return $this->successResponse($manufacturer,'Test Manufacturer created successfully', 201);
+        return $this->successResponse($manufacturer, 'Test Manufacturer created successfully', 201);
     }
 
     /**
@@ -47,7 +47,7 @@ class TestManufacturerController extends ApiController
     public function show($id)
     {
         $manufacturer = TestManufacturer::findOrFail($id);
-        return $this->successResponse($manufacturer,'Test Manufacturer retrieved successfully');
+        return $this->successResponse($manufacturer, 'Test Manufacturer retrieved successfully');
     }
 
     /**
@@ -67,7 +67,7 @@ class TestManufacturerController extends ApiController
         $manufacturer->fill($request->all());
         $manufacturer->update();
 
-        return $this->successResponse($manufacturer,'Test Manufacturer updated successfully');
+        return $this->successResponse($manufacturer, 'Test Manufacturer updated successfully');
     }
 
     /**
