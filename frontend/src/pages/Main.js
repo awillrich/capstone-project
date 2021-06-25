@@ -6,59 +6,59 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import ArchiveIcon from '@material-ui/icons/Archive';
-import AddIcon from '@material-ui/icons/Add';
-import AlarmIcon from '@material-ui/icons/Alarm';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import ArchiveIcon from "@material-ui/icons/Archive";
+import AddIcon from "@material-ui/icons/Add";
+import AlarmIcon from "@material-ui/icons/Alarm";
+import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import PersonIcon from '@material-ui/icons/Person';
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import PersonIcon from "@material-ui/icons/Person";
 import MenuIcon from "@material-ui/icons/Menu";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import PrivateRoute from '../components/PrivateRoute';
+import PrivateRoute from "../components/PrivateRoute";
 import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
 import TestList from "../components/TestList";
-import Login from "../components/Login"
+import Login from "../components/Login";
 import TestForm from "../components/TestForm";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
   drawer: {
     [theme.breakpoints.up("sm")]: {
       width: drawerWidth,
-      flexShrink: 0
-    }
+      flexShrink: 0,
+    },
   },
   appBar: {
     marginLeft: drawerWidth,
     [theme.breakpoints.up("sm")]: {
-      width: `calc(100% - ${drawerWidth}px)`
-    }
+      width: `calc(100% - ${drawerWidth}px)`,
+    },
   },
   menuButton: {
     marginRight: theme.spacing(2),
     [theme.breakpoints.up("sm")]: {
-      display: "none"
-    }
+      display: "none",
+    },
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    width: drawerWidth
+    width: drawerWidth,
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3)
-  }
+    padding: theme.spacing(3),
+  },
 }));
 
 function Main(props) {
@@ -75,8 +75,11 @@ function Main(props) {
     const { icon, primary, to } = props;
 
     const renderLink = React.useMemo(
-      () => React.forwardRef((itemProps, ref) => <Link to={to} ref={ref} {...itemProps} />),
-      [to],
+      () =>
+        React.forwardRef((itemProps, ref) => (
+          <Link to={to} ref={ref} {...itemProps} />
+        )),
+      [to]
     );
 
     return (
@@ -100,14 +103,49 @@ function Main(props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        <ListItemLink button to="/tests/create" primary="Neuer Test" icon={<AddIcon />} />
-        <ListItemLink button to="/tests/running" primary="Laufende Tests" icon={<AlarmIcon />} />
-        <ListItemLink button to="/tests/today" primary="Heutige Tests" icon={<CalendarTodayIcon />} />
-        <ListItemLink button to="/tests/certificate" primary="Bestätigung" icon={<InsertDriveFileIcon />} />
-        <ListItemLink button to="/tests/archive" primary="Archiv" icon={<ArchiveIcon />} />
-      <Divider />
-        <ListItemLink button to="/profile" primary="Profil" icon={<PersonIcon />} />
-        <ListItemLink button to="/logout" primary="Logout" icon={<ExitToAppIcon />} />
+        <ListItemLink
+          button
+          to="/tests/create"
+          primary="Neuer Test"
+          icon={<AddIcon />}
+        />
+        <ListItemLink
+          button
+          to="/tests/running"
+          primary="Laufende Tests"
+          icon={<AlarmIcon />}
+        />
+        <ListItemLink
+          button
+          to="/tests/today"
+          primary="Heutige Tests"
+          icon={<CalendarTodayIcon />}
+        />
+        <ListItemLink
+          button
+          to="/tests/certificate"
+          primary="Bestätigung"
+          icon={<InsertDriveFileIcon />}
+        />
+        <ListItemLink
+          button
+          to="/tests/archive"
+          primary="Archiv"
+          icon={<ArchiveIcon />}
+        />
+        <Divider />
+        <ListItemLink
+          button
+          to="/profile"
+          primary="Profil"
+          icon={<PersonIcon />}
+        />
+        <ListItemLink
+          button
+          to="/logout"
+          primary="Logout"
+          icon={<ExitToAppIcon />}
+        />
       </List>
     </div>
   );
@@ -119,27 +157,27 @@ function Main(props) {
     myHeadersAuth.append("Content-Type", "application/json");
 
     let rawAuth = JSON.stringify({
-      "email": email, //"vcummings@example.org",
-      "password": password
+      email: email, //"vcummings@example.org",
+      password: password,
     });
 
     let requestOptionsAuth = {
-      method: 'POST',
+      method: "POST",
       headers: myHeadersAuth,
       body: rawAuth,
-      redirect: 'follow'
+      redirect: "follow",
     };
 
     fetch(process.env.REACT_APP_BACKEND + "users/login", requestOptionsAuth)
-        .then(response => response.json())
-        .then(result => {
-          localStorage.setItem('access_token', result.token);
-          localStorage.setItem('current_user', JSON.stringify(result.data));
-        })
+      .then((response) => response.json())
+      .then((result) => {
+        localStorage.setItem("access_token", result.token);
+        localStorage.setItem("current_user", JSON.stringify(result.data));
+      });
   }
 
   function handleNewTestForm(testform) {
-    console.log(testform)
+    console.log(testform);
   }
 
   return (
@@ -171,10 +209,10 @@ function Main(props) {
               open={mobileOpen}
               onClose={handleDrawerToggle}
               classes={{
-                paper: classes.drawerPaper
+                paper: classes.drawerPaper,
               }}
               ModalProps={{
-                keepMounted: true // Better open performance on mobile.
+                keepMounted: true, // Better open performance on mobile.
               }}
             >
               {drawer}
@@ -183,7 +221,7 @@ function Main(props) {
           <Hidden xsDown implementation="css">
             <Drawer
               classes={{
-                paper: classes.drawerPaper
+                paper: classes.drawerPaper,
               }}
               variant="permanent"
               open
@@ -197,13 +235,12 @@ function Main(props) {
           <div className={classes.toolbar} />
 
           <Switch>
-            <Route exact path="/">
+            <Route exact path="/"></Route>
+            <Route path="/login">
+              <Login onLogin={login}></Login>
             </Route>
-            <Route path="/login"> 
-              <Login onLogin={login}></Login> 
-            </Route>
-            <Route path="/tests/create" >
-              <TestForm onSubmit={handleNewTestForm}/>
+            <Route path="/tests/create">
+              <TestForm onSubmit={handleNewTestForm} />
             </Route>
             <PrivateRoute path="/tests/:period">
               <TestList></TestList>
@@ -222,7 +259,7 @@ Main.propTypes = {
    */
   container: PropTypes.instanceOf(
     typeof Element === "undefined" ? Object : Element
-  )
+  ),
 };
 
 export default Main;
